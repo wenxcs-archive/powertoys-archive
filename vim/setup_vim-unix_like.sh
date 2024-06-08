@@ -12,7 +12,7 @@ if [[ ! -d ~/.vim/pack/github/start/copilot.vim ]]; then
     git clone https://github.com/github/copilot.vim.git ~/.vim/pack/github/start/copilot.vim
 fi 
 
-curl -fLo ~/.vimrc --create-dirs https://raw.githubusercontent.com/wenxcs/powertoys/master/vim/vimrc
+curl -fLo ~/.vimrc --create-dirs https://raw.githubusercontent.com/wenxcs/powertoys/main/vim/vimrc
 
 vim -c "PlugInstall" -c "qa" > /dev/null 2>&1
 
