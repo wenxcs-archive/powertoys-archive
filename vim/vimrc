@@ -1,0 +1,72 @@
+" Plug
+call plug#begin()
+Plug 'preservim/nerdtree' " File explorer
+Plug 'prabirshrestha/vim-lsp' " Language Server Protocol
+Plug 'mattn/vim-lsp-settings' " Auto install Language Server Protocol
+Plug 'prabirshrestha/asyncomplete.vim' " Auto completion
+Plug 'prabirshrestha/asyncomplete-lsp.vim' " Auto completion
+Plug 'itchyny/lightline.vim' " Simple status line
+Plug 'dracula/vim', { 'as': 'dracula' } " Dracula theme
+Plug 'junegunn/fzf' " Fuzzy finder
+call plug#end()
+
+" General Config
+let mapleader=","
+filetype plugin on
+set showmatch
+syntax on
+au BufRead,BufNewFile *.mlir set filetype=mlir
+au BufRead,BufNewFile *.cu set filetype=cuda
+au BufRead,BufNewFile *.cuh set filetype=cuda
+au BufRead,BufNewFile *.hip set filetype=cuda syntax=hip
+au BufRead,BufNewFile *.py set filetype=python
+set ruler
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+set autoindent
+
+" Nerdtree
+nnoremap <leader>n :NERDTreeToggle<CR>
+
+" lightline
+set laststatus=2 " if you want to always show the status line
+if !has('gui_running') " Strange but must have
+  set t_Co=256
+endif
+
+" Dracula
+colorscheme dracula
+
+"vim-lsp                                                                                                                                                                                   
+let g:lsp_diagnostics_enabled = 0                                                                                                                                                          
+let g:lsp_document_code_action_signs_enabled = 0
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> K <plug>(lsp-hover)
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
+
+    let g:lsp_format_sync_timeout = 1000
+    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+    
+    " refer to doc to add more commands
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
