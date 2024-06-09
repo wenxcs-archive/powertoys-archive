@@ -13,9 +13,7 @@ check_command() {
 
 install_tool_with_brew() {
     local tool=$1
-
     check_command "brew"
-
     if ! command -v "$tool" &> /dev/null; then
         echo "$tool is not installed. Installing $tool..."
         brew install "$tool"
@@ -38,8 +36,13 @@ if [ "$OS_NAME" == "Darwin" ]; then
   install_tool_with_brew "vim"
   install_tool_with_brew "node"
 elif [ "$OS_NAME" == "Linux" ]; then
-  echo "[linux, conda] Installing nodejs and vim"
-  conda install conda-forge::nodejs
+  echo "[linux] Installing nodejs and vim"
+  # latest vim
+  sudo add-apt-repository ppa:jonathonf/vim
+  sudo apt update
+  sudo apt install vim -y
+  # nodejs for copilot
+  curl https://webi.sh/node@lts | sh
 fi
 
 check_command "vim"
@@ -63,3 +66,7 @@ vim -c "PlugInstall" -c "qa" > /dev/null 2>&1
 
 echo "Vim setup complete"
 # sh -c "$(curl -fsSL https://raw.githubusercontent.com/wenxcs/powertoys/master/shell/vim/setup_vim-unix_like.sh)"
+# Userful vim cmd
+# :Copilot auth
+# :LspInstallServer pyright
+
