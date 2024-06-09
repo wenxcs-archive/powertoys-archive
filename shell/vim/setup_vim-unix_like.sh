@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#<INCLUDE_BEGIN:pre.sh>
 script_dir=$(dirname "$0")
 OS_NAME=$(uname)
 check_command() {
@@ -10,9 +11,32 @@ check_command() {
     fi
 }
 
+install_tool_with_brew() {
+    local tool=$1
+
+    check_command "brew"
+
+    if ! command -v "$tool" &> /dev/null; then
+        echo "$tool is not installed. Installing $tool..."
+        brew install "$tool"
+
+        # 再次检查工具是否安装成功
+        if command -v "$tool" &> /dev/null; then
+            echo "$tool has been installed successfully."
+        else
+            echo "Failed to install $tool. Exiting."
+            exit 1
+        fi
+    else
+        echo "$tool is already installed."
+    fi
+}
+#<INCLUDE_END:pre.sh>
+
 if [ "$OS_NAME" == "Darwin" ]; then
   echo "[macos] Installing nodejs and vim"
-  brew install nodejs vim
+  install_tool_with_brew "vim"
+  install_tool_with_brew "node"
 elif [ "$OS_NAME" == "Linux" ]; then
   echo "[linux, conda] Installing nodejs and vim"
   conda install conda-forge::nodejs
@@ -33,10 +57,9 @@ if [[ ! -d ~/.vim/pack/github/start/copilot.vim ]]; then
     git clone https://github.com/github/copilot.vim.git ~/.vim/pack/github/start/copilot.vim &>/dev/null
 fi 
 
-curl -fLo ~/.vimrc --create-dirs https://raw.githubusercontent.com/wenxcs/powertoys/main/vim/vimrc &>/dev/null
+curl -fLo ~/.vimrc --create-dirs https://raw.githubusercontent.com/wenxcs/powertoys/main/shell/vim/vimrc &>/dev/null
 
 vim -c "PlugInstall" -c "qa" > /dev/null 2>&1
 
 echo "Vim setup complete"
-
-# sh -c "$(curl -fsSL https://raw.githubusercontent.com/wenxcs/powertoys/master/vim/setup_vim-unix_like.sh)"
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/wenxcs/powertoys/master/shell/vim/setup_vim-unix_like.sh)"
