@@ -1,4 +1,3 @@
-script_dir=$(dirname "$0")
 OS_NAME=$(uname)
 check_command() {
     local cmd=$1
