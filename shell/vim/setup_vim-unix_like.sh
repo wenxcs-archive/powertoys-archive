@@ -1,35 +1,17 @@
 #!/bin/bash
 
-#<INCLUDE_BEGIN:pre.sh>
-script_dir=$(dirname "$0")
-OS_NAME=$(uname)
-check_command() {
-    local cmd=$1
-    if ! command -v "$cmd" &> /dev/null; then
-        echo "$cmd is not installed. Exiting."
-        exit 1
-    fi
-}
-
-install_tool_with_brew() {
-    local tool=$1
-    check_command "brew"
-    if ! command -v "$tool" &> /dev/null; then
-        echo "$tool is not installed. Installing $tool..."
-        brew install "$tool"
-
-        # 再次检查工具是否安装成功
-        if command -v "$tool" &> /dev/null; then
-            echo "$tool has been installed successfully."
-        else
-            echo "Failed to install $tool. Exiting."
-            exit 1
-        fi
+include_script_from_url() {
+    local url=$1
+    local tmp_file=$(mktemp)
+    if curl -fsSL "$url" -o "$tmp_file"; then
+        source "$tmp_file"
+        rm "$tmp_file"
     else
-        echo "$tool is already installed."
+        echo "Error: Failed to download script from $url"
+        return 1
     fi
 }
-#<INCLUDE_END:pre.sh>
+include_script_from_url "https://raw.githubusercontent.com/wenxcs/powertoys/master/shell/solution/include.sh"
 
 if [ "$OS_NAME" == "Darwin" ]; then
   echo "[macos] Installing nodejs and vim"
