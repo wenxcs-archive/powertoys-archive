@@ -39,7 +39,7 @@ execute_script_from_github() {
   fi
 
   # Download and execute the script
-  sh -c "$(curl -fsSL $script_url)"
+  bash -c "$(curl -fsSL $script_url)"
 
   if [ $? -eq 0 ]; then
     echo "Successfully executed $script_name."
