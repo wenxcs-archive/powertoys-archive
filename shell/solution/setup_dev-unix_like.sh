@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 include_script_from_url() {
     local url=$1
