@@ -20,6 +20,8 @@ if [ "$OS_NAME" == "Darwin" ]; then
 elif [ "$OS_NAME" == "Linux" ]; then
   echo "[linux] Installing nodejs and vim"
   # latest vim
+  sudo apt update
+  sudo apt-get install software-properties-common -y
   sudo add-apt-repository ppa:jonathonf/vim
   sudo apt update
   sudo apt install vim -y
