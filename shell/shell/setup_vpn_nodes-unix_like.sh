@@ -1,10 +1,10 @@
 #!/bin/bash
 
-user=$1
-password=$2
-suffix=$3
-pub_key_path="~/.ssh/id_rsa.pub"
-priv_key_path="~/.ssh/id_rsa"
+user=$2
+password=$3
+suffix=$4
+pub_key_path="id_rsa.pub"
+priv_key_path="id_rsa"
 resource_group="vpn_nodes"
 location_list="japaneast westus2 southeastasia westus3 italynorth australiaeast"
 
